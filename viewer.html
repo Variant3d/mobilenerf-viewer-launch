@@ -41,7 +41,7 @@
     <style>
       html,
       body {
-        background: #333333;
+        background: transparent;
         color: rgba(255, 255, 255, 0.8);
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       }
@@ -341,6 +341,7 @@
 
       let obj_name = "stump";
       if (objname) {
+        console.log("Query param object", objname);
         obj_name = objname;
       }
 
@@ -421,7 +422,7 @@
       renderer.setPixelRatio(1);
       // Make the size small enough so the "Enter VR" button is visible on Quest 2
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setClearColor(new THREE.Color("rgb(255, 255, 255)"), 1.0);
+      renderer.setClearColor(new THREE.Color("rgb(255, 255, 255)"), 0);
 
       renderer.xr.enabled = true;
       renderer.xr.setFramebufferScaleFactor(framebufferScale);
@@ -436,6 +437,7 @@
         let group = new THREE.Group();
         group.add(camera);
         scene.add(group);
+
         group.position.y = 1.3;
       });
 
