@@ -101,105 +101,108 @@
     import { mergeBufferGeometries } from "./js/BufferGeometryUtils.js";
 
     import { OrbitControls } from "./js/OrbitControls.js";
+    //draco
+    import { DRACOLoader } from "./js/DRACOLoader.js";
+
     var loaded = false;
     // copied and slightly modified from SNeRG
 
     //the MLP
     const viewDependenceNetworkShaderFunctions = /* glsl */ `
-      precision mediump float;
-  
-      layout(location = 0) out vec4 pc_FragColor;
-  
-      in vec2 vUv;
-      in vec3 rayDirection;
-  
-      uniform mediump sampler2D tDiffuse0;
-      uniform mediump sampler2D tDiffuse1;
-  
-      mediump vec3 evaluateNetwork( mediump vec4 f0, mediump vec4 f1, mediump vec4 viewdir) {
-          mediump mat4 intermediate_one = mat4(
-              BIAS_LIST_ZERO
-          );
-          mat4 input_values = mat4(f0, f1, __J9__, vec4(0.0));
-  
-          intermediate_one += input_values[0][0] * mat4(__W0_0__)
-              + input_values[0][1] * mat4(__W0_1__)
-              + input_values[0][2] * mat4(__W0_2__)
-              + input_values[0][3] * mat4(__W0_3__)
-              + input_values[1][0] * mat4(__W0_4__)
-              + input_values[1][1] * mat4(__W0_5__)
-              + input_values[1][2] * mat4(__W0_6__)
-              + input_values[1][3] * mat4(__W0_7__)
-              + input_values[2][0] * mat4(__W0_8__)
-              + input_values[2][1] * mat4(__W0_9__)
-              + input_values[2][2] * mat4(__W0_10__) /*ViewDir*/;
-          intermediate_one[0] = max(intermediate_one[0], 0.0);
-          intermediate_one[1] = max(intermediate_one[1], 0.0);
-          intermediate_one[2] = max(intermediate_one[2], 0.0);
-          intermediate_one[3] = max(intermediate_one[3], 0.0);
-  
-          mediump mat4 intermediate_two = mat4(
-              BIAS_LIST_ONE
-          );
-          intermediate_two += intermediate_one[0][0] * mat4(__W1_0__)
-              + intermediate_one[0][1] * mat4(__W1_1__)
-              + intermediate_one[0][2] * mat4(__W1_2__)
-              + intermediate_one[0][3] * mat4(__W1_3__)
-              + intermediate_one[1][0] * mat4(__W1_4__)
-              + intermediate_one[1][1] * mat4(__W1_5__)
-              + intermediate_one[1][2] * mat4(__W1_6__)
-              + intermediate_one[1][3] * mat4(__W1_7__)
-              + intermediate_one[2][0] * mat4(__W1_8__)
-              + intermediate_one[2][1] * mat4(__W1_9__)
-              + intermediate_one[2][2] * mat4(__W1_10__)
-              + intermediate_one[2][3] * mat4(__W1_11__)
-              + intermediate_one[3][0] * mat4(__W1_12__)
-              + intermediate_one[3][1] * mat4(__W1_13__)
-              + intermediate_one[3][2] * mat4(__W1_14__)
-              + intermediate_one[3][3] * mat4(__W1_15__);
-          intermediate_two[0] = max(intermediate_two[0], 0.0);
-          intermediate_two[1] = max(intermediate_two[1], 0.0);
-          intermediate_two[2] = max(intermediate_two[2], 0.0);
-          intermediate_two[3] = max(intermediate_two[3], 0.0);
-  
-          mediump vec3 result = vec3(
-              BIAS_LIST_TWO
-          );
-          result += intermediate_two[0][0] * vec3(__W2_0__)
-                  + intermediate_two[0][1] * vec3(__W2_1__)
-                  + intermediate_two[0][2] * vec3(__W2_2__)
-                  + intermediate_two[0][3] * vec3(__W2_3__)
-                  + intermediate_two[1][0] * vec3(__W2_4__)
-                  + intermediate_two[1][1] * vec3(__W2_5__)
-                  + intermediate_two[1][2] * vec3(__W2_6__)
-                  + intermediate_two[1][3] * vec3(__W2_7__)
-                  + intermediate_two[2][0] * vec3(__W2_8__)
-                  + intermediate_two[2][1] * vec3(__W2_9__)
-                  + intermediate_two[2][2] * vec3(__W2_10__)
-                  + intermediate_two[2][3] * vec3(__W2_11__)
-                  + intermediate_two[3][0] * vec3(__W2_12__)
-                  + intermediate_two[3][1] * vec3(__W2_13__)
-                  + intermediate_two[3][2] * vec3(__W2_14__)
-                  + intermediate_two[3][3] * vec3(__W2_15__);
-          result = 1.0 / (1.0 + exp(-result));
-          return result;
+        precision mediump float;
+
+        layout(location = 0) out vec4 pc_FragColor;
+
+        in vec2 vUv;
+        in vec3 rayDirection;
+
+        uniform mediump sampler2D tDiffuse0;
+        uniform mediump sampler2D tDiffuse1;
+
+        mediump vec3 evaluateNetwork( mediump vec4 f0, mediump vec4 f1, mediump vec4 viewdir) {
+            mediump mat4 intermediate_one = mat4(
+                BIAS_LIST_ZERO
+            );
+            mat4 input_values = mat4(f0, f1, __J9__, vec4(0.0));
+
+            intermediate_one += input_values[0][0] * mat4(__W0_0__)
+                + input_values[0][1] * mat4(__W0_1__)
+                + input_values[0][2] * mat4(__W0_2__)
+                + input_values[0][3] * mat4(__W0_3__)
+                + input_values[1][0] * mat4(__W0_4__)
+                + input_values[1][1] * mat4(__W0_5__)
+                + input_values[1][2] * mat4(__W0_6__)
+                + input_values[1][3] * mat4(__W0_7__)
+                + input_values[2][0] * mat4(__W0_8__)
+                + input_values[2][1] * mat4(__W0_9__)
+                + input_values[2][2] * mat4(__W0_10__) /*ViewDir*/;
+            intermediate_one[0] = max(intermediate_one[0], 0.0);
+            intermediate_one[1] = max(intermediate_one[1], 0.0);
+            intermediate_one[2] = max(intermediate_one[2], 0.0);
+            intermediate_one[3] = max(intermediate_one[3], 0.0);
+
+            mediump mat4 intermediate_two = mat4(
+                BIAS_LIST_ONE
+            );
+            intermediate_two += intermediate_one[0][0] * mat4(__W1_0__)
+                + intermediate_one[0][1] * mat4(__W1_1__)
+                + intermediate_one[0][2] * mat4(__W1_2__)
+                + intermediate_one[0][3] * mat4(__W1_3__)
+                + intermediate_one[1][0] * mat4(__W1_4__)
+                + intermediate_one[1][1] * mat4(__W1_5__)
+                + intermediate_one[1][2] * mat4(__W1_6__)
+                + intermediate_one[1][3] * mat4(__W1_7__)
+                + intermediate_one[2][0] * mat4(__W1_8__)
+                + intermediate_one[2][1] * mat4(__W1_9__)
+                + intermediate_one[2][2] * mat4(__W1_10__)
+                + intermediate_one[2][3] * mat4(__W1_11__)
+                + intermediate_one[3][0] * mat4(__W1_12__)
+                + intermediate_one[3][1] * mat4(__W1_13__)
+                + intermediate_one[3][2] * mat4(__W1_14__)
+                + intermediate_one[3][3] * mat4(__W1_15__);
+            intermediate_two[0] = max(intermediate_two[0], 0.0);
+            intermediate_two[1] = max(intermediate_two[1], 0.0);
+            intermediate_two[2] = max(intermediate_two[2], 0.0);
+            intermediate_two[3] = max(intermediate_two[3], 0.0);
+
+            mediump vec3 result = vec3(
+                BIAS_LIST_TWO
+            );
+            result += intermediate_two[0][0] * vec3(__W2_0__)
+                    + intermediate_two[0][1] * vec3(__W2_1__)
+                    + intermediate_two[0][2] * vec3(__W2_2__)
+                    + intermediate_two[0][3] * vec3(__W2_3__)
+                    + intermediate_two[1][0] * vec3(__W2_4__)
+                    + intermediate_two[1][1] * vec3(__W2_5__)
+                    + intermediate_two[1][2] * vec3(__W2_6__)
+                    + intermediate_two[1][3] * vec3(__W2_7__)
+                    + intermediate_two[2][0] * vec3(__W2_8__)
+                    + intermediate_two[2][1] * vec3(__W2_9__)
+                    + intermediate_two[2][2] * vec3(__W2_10__)
+                    + intermediate_two[2][3] * vec3(__W2_11__)
+                    + intermediate_two[3][0] * vec3(__W2_12__)
+                    + intermediate_two[3][1] * vec3(__W2_13__)
+                    + intermediate_two[3][2] * vec3(__W2_14__)
+                    + intermediate_two[3][3] * vec3(__W2_15__);
+            result = 1.0 / (1.0 + exp(-result));
+            return result;
+          }
+
+
+        void main() {
+            vec4 diffuse1 = texture( tDiffuse0, vUv );
+            if(diffuse1.r == 0.0) discard;
+            vec4 diffuse0 = vec4( normalize(rayDirection), 0.0 );
+            vec4 diffuse2 = texture( tDiffuse1, vUv );
+
+            // deal with iphone
+            diffuse1.a = diffuse1.a*2.0-1.0;
+            diffuse2.a = diffuse2.a*2.0-1.0;
+
+            pc_FragColor.rgb = evaluateNetwork(diffuse1, diffuse2, diffuse0);
+            pc_FragColor.a = 1.0;
         }
-  
-  
-      void main() {
-          vec4 diffuse1 = texture( tDiffuse0, vUv );
-          if(diffuse1.r == 0.0) discard;
-          vec4 diffuse0 = vec4( normalize(rayDirection), 0.0 );
-          vec4 diffuse2 = texture( tDiffuse1, vUv );
-  
-          // deal with iphone
-          diffuse1.a = diffuse1.a*2.0-1.0;
-          diffuse2.a = diffuse2.a*2.0-1.0;
-  
-          pc_FragColor.rgb = evaluateNetwork(diffuse1, diffuse2, diffuse0);
-          pc_FragColor.a = 1.0;
-      }
-  `;
+    `;
 
     /**
      * Creates shader code for the view-dependence MLP.
@@ -309,9 +312,8 @@
 
     let gLastFrame = window.performance.now();
     let oldMilliseconds = 1000;
-    let gLoadedOBJs = 0;
+
     let gLoadedPNGs = 0;
-    let gTotalOBJs = 0;
     let gTotalPNGs = 0;
 
     let object_rescale = 1.0;
@@ -339,7 +341,7 @@
       framebufferScale = +params.get("s") || 1.0;
       foveation = +params.get("f") || 0.0;
 
-      let obj_name = "stump";
+      let obj_name = "gardenvase";
       if (objname) {
         console.log("Query param object", objname);
         obj_name = objname;
@@ -475,7 +477,6 @@
         })
         .then((json) => {
           gTotalPNGs = json["obj_num"] * 2;
-          gTotalOBJs = json["obj_num"] * 8;
 
           let network_weights = json;
           let fragmentShaderSource = createViewDependenceFunctions(
@@ -483,6 +484,16 @@
             j9
           );
 
+          let newmats = [];
+
+          let magFilter = THREE.NearestFilter;
+          let minFilter = THREE.NearestFilter;
+          let anisotropy = 0;
+          let wrap = THREE.ClampToEdgeWrapping;
+          let flipY = false;
+          let generateMipmaps = false;
+
+          // Load Textures
           for (let i = 0, il = json["obj_num"]; i < il; i++) {
             let tex0 = new THREE.TextureLoader().load(
               baseUrl +
@@ -496,8 +507,13 @@
                 render();
               }
             );
-            tex0.magFilter = THREE.NearestFilter;
-            tex0.minFilter = THREE.NearestFilter;
+            tex0.anisotropy = anisotropy;
+            tex0.generateMipmaps = generateMipmaps;
+            tex0.magFilter = magFilter;
+            tex0.minFilter = minFilter;
+            tex0.flipY = flipY;
+            tex0.wrapS = wrap;
+            tex0.wrapT = wrap;
             let tex1 = new THREE.TextureLoader().load(
               baseUrl +
                 obj_name +
@@ -510,58 +526,68 @@
                 render();
               }
             );
-            tex1.magFilter = THREE.NearestFilter;
-            tex1.minFilter = THREE.NearestFilter;
-            const newmat = new THREE.RawShaderMaterial({
-              side: THREE.DoubleSide,
-              vertexShader: document
-                .querySelector("#gbuffer-vert")
-                .textContent.trim(),
-              fragmentShader: fragmentShaderSource,
-              depthFunc: THREE.LessEqualDepth,
-              uniforms: {
-                tDiffuse0: { value: tex0 },
-                tDiffuse1: { value: tex1 },
-              },
-              glslVersion: THREE.GLSL3,
+            tex1.anisotropy = anisotropy;
+            tex1.generateMipmaps = generateMipmaps;
+            tex1.magFilter = magFilter;
+            tex1.minFilter = minFilter;
+            tex1.flipY = flipY;
+            tex1.wrapS = wrap;
+            tex1.wrapT = wrap;
+            newmats.push(
+              new THREE.RawShaderMaterial({
+                name: "mat_shape" + i,
+                side: THREE.DoubleSide,
+                vertexShader: document
+                  .querySelector("#gbuffer-vert")
+                  .textContent.trim(),
+                fragmentShader: fragmentShaderSource,
+                depthFunc: THREE.LessEqualDepth,
+                uniforms: {
+                  tDiffuse0: { value: tex0 },
+                  tDiffuse1: { value: tex1 },
+                },
+                glslVersion: THREE.GLSL3,
+              })
+            );
+          }
+
+          // Load mesh from single GLB
+          var draco = new DRACOLoader();
+          var loader = new GLTFLoader();
+          draco.setDecoderConfig({ type: "js" });
+          draco.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
+          loader.setDRACOLoader(draco);
+          const loadPromise = new Promise((resolve, reject) => {
+            loader.load(obj_name + "/" + obj_name + ".glb", function (object) {
+              resolve(object);
             });
-            const promises = [];
-            for (let j = 0; j < 8; j++) {
-              const loadPromise = new Promise((resolve, reject) => {
-                new OBJLoader().load(
-                  baseUrl +
-                    obj_name +
-                    "_mac/shape" +
-                    i.toFixed(0) +
-                    "_" +
-                    j.toFixed(0) +
-                    ".obj",
-                  function (object) {
-                    gLoadedOBJs++;
-                    resolve(object);
+          });
+
+          loadPromise.then((gltf) => {
+            newmats.forEach((mat, shape_index) => {
+              let shapeMeshes = [];
+              gltf.scene.traverse(function (child) {
+                if (child.isMesh) {
+                  if (child.name.includes("shape" + shape_index)) {
+                    shapeMeshes.push(child.geometry);
                   }
-                );
+                }
               });
-              promises.push(loadPromise);
-            }
-            Promise.all(promises).then((objects) => {
-              const geometries = objects.map(
-                (object) => object.children[0].geometry
-              );
-              const mergedGeometry = mergeBufferGeometries(geometries);
-
-              const object = new THREE.Mesh(mergedGeometry, newmat);
-
-              object.scale.x = object_rescale;
-              object.scale.y = object_rescale;
-              object.scale.z = object_rescale;
-              object.position.x = object_offset_x; //*object_rescale;
-              object.position.y = object_offset_y; //*object_rescale;
-              object.position.z = object_offset_z; //*object_rescale;
-
+              //merge shapemeshes geo
+              const mergedGeometry = mergeBufferGeometries(shapeMeshes);
+              const object = new THREE.Mesh(mergedGeometry, mat);
+              mat.side = THREE.DoubleSide;
+              /*
+                object.scale.x = object_rescale;
+                object.scale.y = object_rescale;
+                object.scale.z = object_rescale;
+                object.position.x = object_offset_x; //*object_rescale;
+                object.position.y = object_offset_y; //*object_rescale;
+                object.position.z = object_offset_z; //*object_rescale;
+                */
               scene.add(object);
             });
-          }
+          });
 
           window.addEventListener("resize", onWindowResize, false);
           onWindowResize();
@@ -572,7 +598,6 @@
     function onWindowResize() {
       const width = window.innerWidth;
       const height = window.innerHeight;
-      console.log(width, height);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
 
@@ -590,16 +615,8 @@
       let smoothFps = 1000 / smoothMilliseconds;
       gLastFrame = currentFrame;
       oldMilliseconds = smoothMilliseconds;
-      if (
-        gTotalOBJs == 0 ||
-        gLoadedOBJs != gTotalOBJs ||
-        gLoadedPNGs != gTotalPNGs
-      ) {
+      if (gLoadedPNGs != gTotalPNGs) {
         document.getElementById("fpsdisplay").innerHTML =
-          "Loading OBJs... " +
-          gLoadedOBJs.toFixed(0) +
-          "/" +
-          gTotalOBJs.toFixed(0) +
           "<br>  Loading PNGs... " +
           gLoadedPNGs.toFixed(0) +
           "/" +
