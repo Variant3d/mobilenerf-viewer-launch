@@ -341,7 +341,7 @@
       framebufferScale = +params.get("s") || 1.0;
       foveation = +params.get("f") || 0.0;
 
-      let obj_name = "gardenvase";
+      let obj_name = "drums";
       if (objname) {
         console.log("Query param object", objname);
         obj_name = objname;
@@ -493,15 +493,20 @@
           let flipY = false;
           let generateMipmaps = false;
 
+          let lores = false;
+          let format = ".png";
+          let texBaseUrl = "";
+          if (lores) {
+            texBaseUrl = obj_name + "/shape";
+            format = "_lores.webp";
+          } else {
+            texBaseUrl = baseUrl + obj_name + "_mac/shape";
+          }
+
           // Load Textures
           for (let i = 0, il = json["obj_num"]; i < il; i++) {
             let tex0 = new THREE.TextureLoader().load(
-              baseUrl +
-                obj_name +
-                "_mac/shape" +
-                i.toFixed(0) +
-                ".png" +
-                "feat0.png",
+              texBaseUrl + i.toFixed(0) + ".png" + "feat0" + format,
               function () {
                 gLoadedPNGs++;
                 render();
@@ -514,13 +519,9 @@
             tex0.flipY = flipY;
             tex0.wrapS = wrap;
             tex0.wrapT = wrap;
+
             let tex1 = new THREE.TextureLoader().load(
-              baseUrl +
-                obj_name +
-                "_mac/shape" +
-                i.toFixed(0) +
-                ".png" +
-                "feat1.png",
+              texBaseUrl + i.toFixed(0) + ".png" + "feat1" + format,
               function () {
                 gLoadedPNGs++;
                 render();
@@ -577,14 +578,14 @@
               const mergedGeometry = mergeBufferGeometries(shapeMeshes);
               const object = new THREE.Mesh(mergedGeometry, mat);
               mat.side = THREE.DoubleSide;
-              /*
-                object.scale.x = object_rescale;
-                object.scale.y = object_rescale;
-                object.scale.z = object_rescale;
-                object.position.x = object_offset_x; //*object_rescale;
-                object.position.y = object_offset_y; //*object_rescale;
-                object.position.z = object_offset_z; //*object_rescale;
-                */
+
+              object.scale.x = object_rescale;
+              object.scale.y = object_rescale;
+              object.scale.z = object_rescale;
+              object.position.x = object_offset_x; //*object_rescale;
+              object.position.y = object_offset_y; //*object_rescale;
+              object.position.z = object_offset_z; //*object_rescale;
+
               scene.add(object);
             });
           });
