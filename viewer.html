@@ -41,7 +41,11 @@
     <style>
       html,
       body {
-        background: transparent;
+        padding: 0;
+        margin: 0;
+      }
+      body {
+        background: #333333;
         color: rgba(255, 255, 255, 0.8);
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       }
@@ -648,8 +652,10 @@
       } else {
         if (!loaded) {
           loaded = true;
+
           let ARButton = document.getElementById("ARButton");
           if (ARButton) {
+            document.body.style.background = "transparent";
             ARButton.style.display = "block";
           }
           let VRButton = document.getElementById("VRButton");
