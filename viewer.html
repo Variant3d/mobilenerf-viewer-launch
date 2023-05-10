@@ -339,9 +339,9 @@
       const params = new URL(window.location.href).searchParams;
       const objname = params.get("obj");
       framebufferScale = +params.get("s") || 1.0;
-      foveation = +params.get("f") || 0.0;
+      foveation = +params.get("f") || 0.5;
 
-      let obj_name = "drums";
+      let obj_name = "room";
       if (objname) {
         console.log("Query param object", objname);
         obj_name = objname;
@@ -534,6 +534,7 @@
             tex1.flipY = flipY;
             tex1.wrapS = wrap;
             tex1.wrapT = wrap;
+
             newmats.push(
               new THREE.RawShaderMaterial({
                 name: "mat_shape" + i,

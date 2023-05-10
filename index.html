@@ -59,6 +59,7 @@
       grid-column: 1 / -1;
       font-size: 28px;
       color: rgb(255, 68, 0);
+      margin-top: 2rem;
     }
 
     .previewImgWrapper img {
@@ -94,13 +95,14 @@
       </div>
 
       <div style="text-align: justify; font-size: 20; line-height: 150%">
-        This is <strong style="text-decoration: underline">NOT</strong> the
-        official page for MobileNeRF. For that, please visit:
-        <a href="https://mobile-nerf.github.io/">mobile-nerf.github.io</a>.
-        Instead this page allows you to view the the MobileNeRF live demo scenes
-        in VR through WebXR. This is achieved by making some changes to the
-        original viewer, but all credit for the amazing research, code for the
-        original viewer and demo data goes to the original authors.
+        Adapted from
+        <a href="https://mobilenerf-webxr.fern.solutions/"
+          >mobilenerf-webxr.fern.solutions</a
+        >, in turn adapted from the original
+        <a href="https://mobile-nerf.github.io/">mobile-nerf.github.io</a>. This
+        page allows you to view the the MobileNeRF live demo scenes in VR and AR
+        through WebXR. WebXR support on iOS is provided via
+        <a href="https://launch.variant3d.com">Variant Launch's WebAR SDK</a>
       </div>
 
       <br /><br /><br />
@@ -109,62 +111,93 @@
         <span style="color: rgb(255, 68, 0)">-- Instructions --</span>
       </div>
       <div style="text-align: justify; font-size: 20; line-height: 150%">
-        Pick a rendering quality preset for any of the demo scenes. On the next
-        page click 'Enter VR' to view the scene in VR.
-        <br />
-        <b>Note:</b> This is very demanding to run and won't always run smoothly
-        on a standalone Quest 2. The lowest '0.5x' and '1.0x' quality presets
-        work decently, though varies between scene. Therefor it's highly
-        recommended to run this on a PC with a VR headset attached. <br /><br />
+        <p>
+          <b>Note:</b> This approach to rendering NeRFs takes an extreme amount
+          of RAM for a mobile device - downloading and parsing multiple
+          gigabytes of uncompressed 4k textures.
+        </p>
+        <p>
+          This may lead to memory issues on phones and tablets, which may throw
+          errors or simply render a blank page. The scenes provided have been
+          tested on Quest 2 and iPhone 13 Pro
+        </p>
       </div>
 
       <div class="grid-container">
+        <div class="section-title">360 Scenes</div>
 
-    
-        <div class="section-title">-- Bounded scenes --</div>
         <div>
           <div class="previewImgWrapper">
-            <img src="https://mobile-nerf.github.io/image/preview_drums.jpg" />
+            <img
+              src="https://mobile-nerf.github.io/image/preview_gardenvase.jpg"
+            />
           </div>
-          <a href="./viewer.html?obj=drums&s=1.0" class="view-ar-button">View in AR</a>
+          <a href="./viewer.html?obj=gardenvase&s=1.0" class="view-ar-button"
+            >View in AR</a
+          >
         </div>
-        <div>
-          <div class="previewImgWrapper">
-            <img src="https://mobile-nerf.github.io/image/preview_horns.jpg" />
-          </div>
-          <a href="./viewer.html?obj=horns&s=1.0" class="view-ar-button">View in AR</a>
-        </div>
-    
-        <div>
-          <div class="previewImgWrapper">
-            <img src="https://mobile-nerf.github.io/image/preview_trex.jpg" />
-          </div>
-          <a href="./viewer.html?obj=trex&s=1.0" class="view-ar-button">View in AR</a>
-        </div>
-    
-        <div class="section-title">-- Unbounded 360&#176; scenes --</div>
-    
-        <div>
-          <div class="previewImgWrapper">
-            <img src="https://mobile-nerf.github.io/image/preview_bicycle.jpg" />
-          </div>
-          <a href="./viewer.html?obj=bicycle&s=1.0" class="view-ar-button">View in AR</a>
-        </div>
-    
-        <div>
-          <div class="previewImgWrapper">
-            <img src="https://mobile-nerf.github.io/image/preview_gardenvase.jpg" />
-          </div>
-          <a href="./viewer.html?obj=gardenvase&s=1.0" class="view-ar-button">View in AR</a>
-        </div>
-    
+
         <div>
           <div class="previewImgWrapper">
             <img src="https://mobile-nerf.github.io/image/preview_stump.jpg" />
           </div>
-          <a href="./viewer.html?obj=stump&s=1.0" class="view-ar-button">View in AR</a>
+          <a href="./viewer.html?obj=stump&s=1.0" class="view-ar-button"
+            >View in AR</a
+          >
         </div>
-      </div>
+
+        <div class="section-title">Directional Scenes</div>
+        <div>
+          <div class="previewImgWrapper">
+            <img src="https://mobile-nerf.github.io/image/preview_drums.jpg" />
+          </div>
+          <a href="./viewer.html?obj=drums&s=1.0" class="view-ar-button"
+            >View in AR</a
+          >
+        </div>
+        <div>
+          <div class="previewImgWrapper">
+            <img src="https://mobile-nerf.github.io/image/preview_fern.jpg" />
+          </div>
+          <a href="./viewer.html?obj=fern&s=1.0" class="view-ar-button"
+            >View in AR</a
+          >
+        </div>
+        <div>
+          <div class="previewImgWrapper">
+            <img src="https://mobile-nerf.github.io/image/preview_mic.jpg" />
+          </div>
+          <a href="./viewer.html?obj=mic&s=1.0" class="view-ar-button"
+            >View in AR</a
+          >
+        </div>
+
+        <div>
+          <div class="previewImgWrapper">
+            <img src="https://mobile-nerf.github.io/image/preview_horns.jpg" />
+          </div>
+          <a href="./viewer.html?obj=horns&s=1.0" class="view-ar-button"
+            >View in AR</a
+          >
+        </div>
+
+        <div>
+          <div class="previewImgWrapper">
+            <img src="https://mobile-nerf.github.io/image/preview_trex.jpg" />
+          </div>
+          <a href="./viewer.html?obj=trex&s=1.0" class="view-ar-button"
+            >View in AR</a
+          >
+        </div>
+
+        <div>
+          <div class="previewImgWrapper">
+            <img src="https://mobile-nerf.github.io/image/preview_room.jpg" />
+          </div>
+          <a href="./viewer.html?obj=room&s=1.0" class="view-ar-button"
+            >View in AR</a
+          >
+        </div>
       </div>
     </div>
   </body>
