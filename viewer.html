@@ -76,9 +76,29 @@
         background-color: #333333 !important;
         display: none;
       }
+
+      #backButton {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 10px 20px;
+        background-color: rgba(128, 128, 128, 0.5);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      #backButton:hover {
+        background-color: rgba(128, 128, 128, 0.7);
+      }
     </style>
   </head>
   <body>
+    <div id="overlayDom">
+      <button id="backButton" onclick="window.history.back()">Back</button>
+    </div>
     <div id="wrapper">
       <div id="container"></div>
 
@@ -401,7 +421,7 @@
         near_plane = 0.1;
       } else if (obj_name === "gardenvase") {
         object_rescale = 3.0;
-        object_offset_y = 2.25;
+        object_offset_y = 1.5;
         object_offset_z = -2.0;
         near_plane = 0.1;
       } else if (obj_name === "stump") {
@@ -449,6 +469,8 @@
           container.appendChild(
             ARButton.createButton(renderer, {
               requiredFeatures: ["local", "hit-test"],
+              optionalFeatures: ["dom-overlay"],
+              domOverlay: { root: document.getElementById("overlayDom") },
             })
           );
         } else {
