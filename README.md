@@ -1,4 +1,9 @@
-# MobileNeRF viewer for WebXR
+# MobileNeRF AR/VR viewer for WebXR
+
+> This project is heavily based on https://github.com/mrxz/mobilenerf-viewer-webxr by Fern Solutions. It adds cross-platform immersive AR support (via Variant Launch on iOS), and attempts to reduce some of the memory pressure on load by using draco-compressed mesh assets.
+
+Below is the original README:
+
 > This project is **NOT** made by the people behind  MobileNeRF. For the original see: [Website](https://mobile-nerf.github.io/) | [Source](https://github.com/google-research/jax3d/tree/main/jax3d/projects/mobilenerf). Instead it's just a hacky adjustment to their viewer allowing the MobileNeRF demo scenes to be viewed in VR through WebXR.
 
 Seeing MobileNeRF render at interactive framerates on mobile devices immediately gave me the urge to try and render them in VR. The result is this small hacky project, which is heavily based on the original viewer, and exclusively uses the same live demo scenes. All credit for the research, original viewer code and demo scene data goes to the [original authors](https://mobile-nerf.github.io/).
