@@ -1,6 +1,6 @@
 # MobileNeRF AR/VR viewer for WebXR
 
-> This project is heavily based on https://github.com/mrxz/mobilenerf-viewer-webxr by Fern Solutions. It adds cross-platform immersive AR support (via Variant Launch on iOS), and attempts to reduce some of the memory pressure on load by using draco-compressed mesh assets.
+> This project is heavily based on https://github.com/mrxz/mobilenerf-viewer-webxr by Fern Solutions. It adds cross-platform immersive AR support (via Variant Launch on iOS), and attempts to reduce some of the memory pressure on load by using draco-compressed mesh assets. It was created to extend the WebXR support to handheld Android and iOS devices.
 
 Below is the original README:
 
